@@ -42,3 +42,17 @@
     - mockito: 목 라이브러리
     - assertj: 테스트 코드를 좀 더 편하게 작성하게 도와주는 라이브러리
     - spring-test: 스프링 통합 테스트 지원
+
+
+- JPQL vs Querydsl
+  - 오류 시점
+    - JPQL: 쿼리가 문자(String)기 때문에 쿼리에 오타가 있는 경우, 실행 시점(Runtime) 오류 발생
+    - Querydsl: 쿼리가 Java코드로 작성되기 때문에 쿼리에 오타가 있는 경우, 컴파일 시점(Compile) 오류 발생
+      - Querydsl이 JPQL보다 이런면에서 안정성이 높음
+  - 파라미터 바인딩
+    - JPQL: 파라미티 직접 바인딩
+    - Querydsl: 파라미타 자동 바인딩 처리
+
+
+- JPAQueryFactory를 필드로 제공하면 동시성 문제는 어떻게될까?
+  - 동시성문제는 JPAQueryFactory를 생성할때 제공하는 EntityManager(em)에달려있다. 스프링프레임워크는 여러 쓰레드에서 동시에 같은 EntityManager에 접근해도, 트랜잭션마다 별도의 영속성컨텍스트를 제공하기 때문에, 동시성 문제는 걱정하지 않아도된다
