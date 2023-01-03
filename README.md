@@ -136,3 +136,38 @@
   - fetchFirst(): limit(1).fetchOne()
   - @Deprecated fetchResults(): 페이징 정보 포함. total count쿼리 추가 실행
   - @Deprecated fetchCount(): count쿼리로 변경해서 count 수 조회
+
+
+- 정렬
+  ```java
+  /**
+   * 회원 정렬 순서
+   * 1. 회원 나이 내림차순(desc)
+   * 2. 회원 이름 오름차순(asc)
+   * 단 2에서 회원 이름이 없으면, 마지막에 출력(nulls last)
+   */
+  @Test
+  public void sort() {
+      QMember member = QMember.member;
+
+      em.persist(new Member(null, 100));
+      em.persist(new Member("member5", 100));
+      em.persist(new Member("member6", 100));
+
+      List<Member> fetch = queryFactory
+              .selectFrom(member)
+              .where(member.age.eq(100))
+              .orderBy(member.age.desc(), member.username.asc().nullsLast())
+              .fetch();
+
+      Member member5 = fetch.get(0);
+      Member member6 = fetch.get(1);
+      Member memberNull = fetch.get(2);
+
+      assertThat(member5.getUsername()).isEqualTo("member5");
+      assertThat(member6.getUsername()).isEqualTo("member6");
+      assertThat(memberNull.getUsername()).isNull();
+  }
+  ```
+  - desc(), asc(): 일반 정렬
+  - nullsLast(), nullsFirst(): null 데이터 순서 여부
