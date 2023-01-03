@@ -56,3 +56,15 @@
 
 - JPAQueryFactory를 필드로 제공하면 동시성 문제는 어떻게될까?
   - 동시성문제는 JPAQueryFactory를 생성할때 제공하는 EntityManager(em)에달려있다. 스프링프레임워크는 여러 쓰레드에서 동시에 같은 EntityManager에 접근해도, 트랜잭션마다 별도의 영속성컨텍스트를 제공하기 때문에, 동시성 문제는 걱정하지 않아도된다
+
+
+- 기본 Q-Type 활용
+  - QClass 인스턴스 사용하는 2가지 방법
+    ```java
+    QMember qMember = newQMember("m"); // JPQL alias(별칭) 직접 지정
+    QMember qMember = QMember.member; // 기본 인스턴스 사용(QMember에 생성되는 public static final 변수)
+    ```
+  - 다음 설정을 추가하면 실행되는 JPQL을 확인 할 수 있다(in application.yml or properties)
+    ```
+    spring.jpa.properties.hibernate.use_sql_comments: true
+    ```
