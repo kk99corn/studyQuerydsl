@@ -229,3 +229,7 @@
     - leftJoin(): left 외부 조인(left outer join)
     - rightJoin(): right 외부 조인(right outer join)
     - JPQL의 on과 성능 최적화를 위한 fetch 조인 제공
+  - 세타 조인
+    - 연관 관계가 없는 필드로 조인
+    - from 절에 여러 엔티티를 선택해서 세타 조인(theta join)
+    - 외부 조인 불가능
