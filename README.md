@@ -136,6 +136,7 @@
   - fetchFirst(): limit(1).fetchOne()
   - @Deprecated fetchResults(): 페이징 정보 포함. total count쿼리 추가 실행
   - @Deprecated fetchCount(): count쿼리로 변경해서 count 수 조회
+    - https://velog.io/@ok0/QueryDSL-FetchResults-is-deprecated
 
 
 - 정렬
@@ -171,3 +172,36 @@
   ```
   - desc(), asc(): 일반 정렬
   - nullsLast(), nullsFirst(): null 데이터 순서 여부
+
+
+- 페이징
+  ```java
+  @Test
+  public void paging1() {
+      QMember member = QMember.member;
+      List<Member> fetch = queryFactory
+              .selectFrom(member)
+              .orderBy(member.username.desc())
+              .offset(1)
+              .limit(2)
+              .fetch();
+      assertThat(fetch.size()).isEqualTo(2);
+  }
+  
+  @Test
+  public void paging2() {
+      QMember member = QMember.member;
+      QueryResults<Member> memberQueryResults = queryFactory
+              .selectFrom(member)
+              .orderBy(member.username.desc())
+              .offset(1)
+              .limit(2)
+              .fetchResults();
+      assertThat(memberQueryResults.getTotal()).isEqualTo(4);
+      assertThat(memberQueryResults.getLimit()).isEqualTo(2);
+      assertThat(memberQueryResults.getOffset()).isEqualTo(1);
+      assertThat(memberQueryResults.getResults().size()).isEqualTo(2);
+  }
+  ```
+  - 주의: fetchResults()는 count쿼리가 같이 실행되니 성능상 주의(모든 조건이 중복 실행된다.)
+  - 참고: 실무에서 페이징 쿼리를 작성할 때, 데이터를 조회하는 쿼리는 여러 테이블을 조인해야 하지만, count쿼리는 조인이 필요 없는 경우도 있다. 그런데 이렇게 자동화된 count쿼리는 원본 쿼리와 같이 모두 조인을 해버리기 때문에 성능이 안나올 수 있다. count쿼리에 조인이 필요없는 성능 최적화가 필요하다면, count 전용 쿼리를 별도로 작성해야한다.
