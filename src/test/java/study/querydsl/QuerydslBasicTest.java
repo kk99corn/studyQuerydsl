@@ -58,12 +58,55 @@ public class QuerydslBasicTest {
     @Test
     public void startQuerydsl() {
         // QMember m = new QMember("m"); // JQPL alias 설정
-        QMember m = QMember.member; // QMember에 public static final로 생성되어있음 
+        QMember m = QMember.member; // QMember에 public static final로 생성되어있음
 
         Member findMember = queryFactory
                 .select(m)
                 .from(m)
                 .where(m.username.eq("member1"))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search() {
+        QMember member = QMember.member;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                // and 조건
+                .where(member.username.eq("member1")
+                        .and(member.age.eq(10)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search2() {
+        QMember member = QMember.member;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                // and 조건
+                .where(member.username.eq("member1")
+                        .and(member.age.between(10, 30)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void searchAndParam() {
+        QMember member = QMember.member;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                // and 조건(where()안에 여러개 인자를 넣으면 다 And 연산 수행)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10))
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
