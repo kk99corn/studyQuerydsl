@@ -126,3 +126,13 @@
     ```
     - where()에 파라미터로 검색조건을 추가하면, AND 조건으로 동작한다.
     - 이 경우 null 값은 무시 -> 메서드 추출을 활용해서 동적 쿼리를 깔끔하게 작성 가능
+
+
+- 결과 조회
+  - fetch(): 리시트 조회, 데이터 없으면 빈 리스트 반환
+  - fetchOne(): 단 건 조회
+    - 결과가 없으면, null
+    - 결과가 둘 이상이면, com.querdsl.core.NonUniqueResultException
+  - fetchFirst(): limit(1).fetchOne()
+  - @Deprecated fetchResults(): 페이징 정보 포함. total count쿼리 추가 실행
+  - @Deprecated fetchCount(): count쿼리로 변경해서 count 수 조회
