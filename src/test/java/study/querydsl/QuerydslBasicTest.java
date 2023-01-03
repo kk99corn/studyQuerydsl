@@ -57,7 +57,8 @@ public class QuerydslBasicTest {
 
     @Test
     public void startQuerydsl() {
-        QMember m = new QMember("m");
+        // QMember m = new QMember("m"); // JQPL alias 설정
+        QMember m = QMember.member; // QMember에 public static final로 생성되어있음 
 
         Member findMember = queryFactory
                 .select(m)
