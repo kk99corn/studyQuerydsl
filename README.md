@@ -217,3 +217,15 @@
       - avg(): 평균
       - max(): 최대
       - min(): 최소
+
+
+- 조인
+  - 기본 조인
+    - 조인의 기본 문법은 첫 번째 파라미터에 조인 대상을 지정하고, 두 번째 파라미터에 별칭(alias)으로 사용할 Q타입을 지정하면 된다.
+      ```
+      join(조인 대상, 별칭으로 사용할 Q타입)
+      ```
+    - join(), innerJoin(): 내부 조인(inner join)
+    - leftJoin(): left 외부 조인(left outer join)
+    - rightJoin(): right 외부 조인(right outer join)
+    - JPQL의 on과 성능 최적화를 위한 fetch 조인 제공
