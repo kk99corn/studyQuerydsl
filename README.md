@@ -266,3 +266,33 @@
     1. 서브쿼리를 join으로 변경한다.(가능한 상황도 있고, 불가능한 상황도 있다.)
     2. 애플리케이션에서 쿼리를 2번 분리해서 실행한다.
     3. nativeSQL을 사용한다.
+
+
+- Case 문
+  - JPQL, Querydsl에서도 case문 처리가 가능하지만,  
+    실무에서는 되도록 db에서 처리하지말고, 비지니스 로직에서 데이터 컨트롤하는게 대부분의 경우 좋음
+
+
+- 상수
+  - 상수가 필요하면 Expressions.constant(xxx) 사용 
+    ```java
+    Tuple result = queryFactory
+        .select(member.username, Expressions.constatns("A"))
+        .from(member)
+        .fetchFirst();
+    ```
+    - 참고: 위와 같이 최적화가 가능하면 SQL에 constant 값을 넘기지 않는다.  
+      상수를 더하는 것 처럼 최적화가 어려우면 SQL에 constant값을 넘긴다.
+
+
+- 문자 더하기
+  - concat()
+    ```java
+    String result = queryFactory
+        .select(member.username.concat("_").concat(member.age.stringValue()))
+        .from(member)
+        .where(member.username.eq("member1"))
+        .fetchOne();
+    ```
+    - 참고: member.age.stringValue() 부분이 중요한데, 문자가 아닌 다른 타입들은 stringValue()로 문자로 변환할 수 있다.  
+      이 방법은 ENUM을 처리할 때도 자주 사용한다.
