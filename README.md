@@ -244,3 +244,9 @@
   - 주의: 문법을 잘 봐야한다. leftJoin() 부분에 일반 조인과 다르게 엔티티가 하나만 들어간다
     - 일반조인: leftJoin(member.team, team)
     - on조인: from(member).leftJoin(team).on(xxx)
+
+
+- 조인 - 페치 조인
+  - 페치 조인은 SQL에서 제공하는 기능이 아니다.
+  - SQL조인을 활용해서 연관된 엔티티를 SQL 한번에 조회하는 기능이다.
+  - 주로 성능 최적화에 사용하는 방법.(JPA N+1 문제 해결)
