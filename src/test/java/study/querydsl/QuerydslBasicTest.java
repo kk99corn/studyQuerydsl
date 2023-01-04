@@ -523,4 +523,19 @@ public class QuerydslBasicTest {
             System.out.println("t = " + t);
         }
     }
+
+    @Test
+    public void concat() {
+        QMember member = QMember.member;
+
+        List<String> result = queryFactory
+                .select(member.username.concat("_").concat(member.age.stringValue()))
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetch();
+
+        for (String t : result) {
+            System.out.println("t = " + t);
+        }
+    }
 }
