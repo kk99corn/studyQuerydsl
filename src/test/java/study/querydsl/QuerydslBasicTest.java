@@ -453,4 +453,22 @@ public class QuerydslBasicTest {
         assertThat(result).extracting("age")
                 .containsExactly(20, 30, 40);
     }
+
+    @Test
+    public void selectSubQuery() {
+        QMember member = QMember.member;
+        QMember memberSub = new QMember("memberSub");
+
+        List<Tuple> result = queryFactory
+                .select(member.username,
+                        JPAExpressions
+                                .select(memberSub.age.avg())
+                                .from(memberSub))
+                .from(member)
+                .fetch();
+
+        for (Tuple t : result) {
+            System.out.println("t = " + t);
+        }
+    }
 }
