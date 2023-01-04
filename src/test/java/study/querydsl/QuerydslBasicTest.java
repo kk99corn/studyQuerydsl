@@ -366,4 +366,23 @@ public class QuerydslBasicTest {
         boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
         assertThat(loaded).as("페치 조인 미적용").isFalse();
     }
+
+    @Test
+    public void fetchJoinUse() {
+        // 페치조인 테스트를 위해서는 영속선 컨텍스트를 깔끔히 날려주고 진행
+        em.flush();
+        em.clear();
+
+        QMember member = QMember.member;
+        QTeam team = QTeam.team;
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .join(member.team, team).fetchJoin()
+                .where(member.username.eq("member1"))
+                .fetchOne();
+
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+        assertThat(loaded).as("페치 조인 적용").isTrue();
+    }
 }
