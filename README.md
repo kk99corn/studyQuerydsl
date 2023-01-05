@@ -333,3 +333,38 @@
       - 순수 JPA에서 DTO를 조회할 때는 new 명령어를 사용해서 생성자 호출을 해야함.
       - DTO의 package이름을 다 적어줘야해서 지저분함
       - 생성자 호출 방식만 지원함.
+
+
+- Querydsl 빈 생성(Bean Population)
+  - 결과를 DTO 반환할 때 사용
+  - 다음 3가지 방법 지원
+    1. 프로퍼티 접근
+       ```java
+       // Projections.bean()
+       List<MemberDto> result = queryFactory
+               .select(Projections.bean(MemberDto.class,
+                       member.username,
+                       member.age))
+               .from(member)
+               .fetch();
+       ```
+    2. 필드 직접 접근
+       ```java
+       // Projections.fields()
+       List<MemberDto> result = queryFactory
+               .select(Projections.fields(MemberDto.class,
+                       member.username,
+                       member.age))
+               .from(member)
+               .fetch();
+       ```
+    3. 생성자 사용
+       ```java
+       // Projections.constructor()
+       List<MemberDto> result = queryFactory
+               .select(Projections.constructor(MemberDto.class,
+                       member.username,
+                       member.age))
+               .from(member)
+               .fetch();
+       ```
