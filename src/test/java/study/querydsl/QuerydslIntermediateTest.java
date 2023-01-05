@@ -1,6 +1,7 @@
 package study.querydsl;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,6 +67,20 @@ public class QuerydslIntermediateTest {
 
         for (MemberDto m : resultList) {
             System.out.println("m.toString() = " + m.toString());
+        }
+    }
+
+    @Test
+    public void findBySetter() {
+        List<MemberDto> result = queryFactory
+                .select(Projections.bean(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto.toString());
         }
     }
 }
