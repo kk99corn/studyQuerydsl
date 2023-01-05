@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.querydsl.dto.MemberDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.Team;
 
@@ -55,6 +56,16 @@ public class QuerydslIntermediateTest {
 
         for (Tuple t : result) {
             System.out.println("t = " + t);
+        }
+    }
+
+    @Test
+    public void findDtoByJPQL() {
+        List<MemberDto> resultList = em.createQuery("select new study.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+                .getResultList();
+
+        for (MemberDto m : resultList) {
+            System.out.println("m.toString() = " + m.toString());
         }
     }
 }
