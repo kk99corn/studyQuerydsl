@@ -318,3 +318,18 @@
         .from(member)
         .fetch();
     ```
+    
+
+- 프로젝션과 결과 반환 - DTO 조회
+  - 순수 JPA에서 DTO 조회
+    ```java
+    List<MemberDto> resultList = em.createQuery("select new study.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+            .getResultList();
+    
+    for (MemberDto m : resultList) {
+        System.out.println("m.toString() = " + m.toString());
+    }
+    ```
+      - 순수 JPA에서 DTO를 조회할 때는 new 명령어를 사용해서 생성자 호출을 해야함.
+      - DTO의 package이름을 다 적어줘야해서 지저분함
+      - 생성자 호출 방식만 지원함.
