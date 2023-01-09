@@ -415,3 +415,26 @@
       }
       ```
     - Where 다중 파라미터 사용
+      ```java
+      private List<Member> searchMember2(String usernameCond, Integer ageCond) {
+          return queryFactory
+                .selectFrom(member)
+                .where(usernameEq(usernameCond), ageEq(ageCond))
+                .fetch();
+      }
+
+      private BooleanExpression usernameEq(String usernameCond) {
+          return usernameCond != null ? member.username.eq(usernameCond) : null;
+      }
+  
+      private BooleanExpression ageEq(Integer ageCond) {
+          return ageCond != null ? member.age.eq(ageCond) : null;
+      }
+  
+      private BooleanExpression allEq(String usernameCond, Integer ageCond) {
+          return usernameEq(usernameCond).and(ageEq(ageCond));
+      }
+      ```
+      - where 조건에 null 값은 무시된다.
+      - 메서드를 다른 쿼리에서도 재활용(재사용) 할 수 있다.
+      - 쿼리 자체의 가독성이 높아진다.
