@@ -438,3 +438,40 @@
       - where 조건에 null 값은 무시된다.
       - 메서드를 다른 쿼리에서도 재활용(재사용) 할 수 있다.
       - 쿼리 자체의 가독성이 높아진다.
+
+
+- 수정, 삭제 벌크 연산
+  - 쿼리 한번으로 대량 데이터 수정
+    ```java
+    long count = queryFactory
+            .update(member)
+            .set(member.username, "비회원")
+            .where(member.age.lt(28))
+            .execute();
+    ```
+  - 쿼리 한번으로 대량 데이터 삭제
+    ```java
+    long count = queryFactory
+            .delete(member)
+            .where(member.age.gt(18))
+            .execute();
+    ```
+  - 주의: JPQL 배치와 마찬가지로 영속성 컨텍스트에 있는 엔티티를 무시하고 실행되기 때문에 배치 쿼리를 실행하고 나면 영속성 컨텍스트를 초기화 하는 것이 안전하다.
+    ```java
+    long count = queryFactory
+            .update(member)
+            .set(member.username, "비회원")
+            .where(member.age.lt(28))
+            .execute();
+
+    // bulk연산 이후 flush & clear(영속성 컨텍스트 초기화)
+    em.flush();
+    em.clear();
+
+    List<Member> result = queryFactory
+            .selectFrom(member)
+            .fetch();
+    for (Member m : result) {
+        System.out.println("m = " + m);
+    }
+    ```
