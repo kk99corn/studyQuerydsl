@@ -507,3 +507,38 @@
         .where(member.username.eq(member.username.lower()))
         .fetch();
     ```
+
+- 스프링데이터 JPA가제공하는 Querydsl 기능
+  - 해당 챕터에서 소개되는 기능은 제약이 커서 복잡한 실무 환경에서 사용하기에는 많이 부족하다.
+  - 하지만, 스프링 데이터에서 제공하는 기능이므로 간단히 알아본다.
+  - 인터페이스 지원 - QuerydslPredicateExecutor
+    - 공식 URL: https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#core.extensions.querydsl
+      - QuerydslPredicateExecutor 인터페이스 구조
+        ```java
+        public interface QuerydslPredicateExecutor<T> {
+            Optional<T>findById(Predicate predicate);
+            Iterable<T>findAll(Predicate predicate);
+            longcount(Predicate predicate);
+            booleanexists(Predicate predicate);
+      
+            // ... more functionality omitted.
+        }
+        ```
+      - 리포지토리에 적용
+        ```java
+        // repository interface
+        interface MemberRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
+        }
+        
+        // 사용법
+        Iterable result = memberRepository.findAll(
+            member.age.between(10, 40)
+            .and(member.username.eq("member1"))
+        );
+        ```
+    - 한계점
+      1. 조인이 안됨(묵시적 조인은 가능하지만, left join이 불가능하다.)
+      2. 클라이언트가 Querydsl에 의존해야 한다.   
+         (서비스 클래스가 Querydsl이라는 구현 기술에 의존해야 한다.)
+      3. 복잡한 실무환경에서 사용하기에는 한계가 명확하다.
+         (실무에서는 단일 테이블로 서비스를 제공하는게 아니기 때문,, 복잡한 테이블 구조(조인 필요한))
