@@ -542,3 +542,10 @@
          (서비스 클래스가 Querydsl이라는 구현 기술에 의존해야 한다.)
       3. 복잡한 실무환경에서 사용하기에는 한계가 명확하다.
          (실무에서는 단일 테이블로 서비스를 제공하는게 아니기 때문,, 복잡한 테이블 구조(조인 필요한))
+  - Querydsl Web 지원
+    - 공식 URL: https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#core.web.type-safe
+    - 한계점
+      1. 단순한 조건만 가능
+      2. 조건을 커스텀하는 기능이 복잡하고 명시적이지 않음
+      3. 컨트롤러가 Querydsl에 의존
+      4. 복잡한 실무환경에 사용하기에는 한계가 명확하다.
